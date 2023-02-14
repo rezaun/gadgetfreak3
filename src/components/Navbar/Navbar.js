@@ -1,7 +1,12 @@
+import { signOut } from 'firebase/auth';
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link } from 'react-router-dom'
+import auth from '../../Firebase/Firebase.init';
+
 
 const Navbar = () => {
+    const [user, loading] = useAuthState(auth);
     return (
         <div>
             <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -18,7 +23,11 @@ const Navbar = () => {
                             <li className="nav-item"> <Link className="nav-link " aria-current="page" to="/orderList">Order List</Link></li>               
                         </ul>
                         <span>
-                            <Link className="nav-link" to="/login">Login</Link>
+                        {
+                            user ? <span><img style={{ width: "20px", marginRight: "5px", borderRadius: "10px" }} src={user.photoURL} alt={user.displayName} />{user.displayName}
+                                <button className="btn btn-link" onClick={() => signOut(auth)}>Sign Out</button>
+                            </span> : 'User'
+                        }
                         </span>
                       
                     </div>

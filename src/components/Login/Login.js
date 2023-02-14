@@ -1,12 +1,23 @@
 import React from 'react'
 import auth from '../../Firebase/Firebase.init';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+    const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+    const [user, loading] = useAuthState(auth);
+
+    const navigate = useNavigate()
+    const location = useLocation();
+
+    const from = location.state.from.pathname || "/";
     
 const handleSignIn =()=>{
     signInWithGoogle()
+}
+
+if(user){
+    navigate(from, {replace:true});
 }
     
   return (
